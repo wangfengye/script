@@ -6,11 +6,11 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <Button
+    <TextView
         android:id="@+id/btn_search_wechat"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="微信搜搜"
+        android:text="多功能脚本工具"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

@@ -5,9 +5,15 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.telecom.Call;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ListView;
+
+import com.yhao.floatwindow.FloatWindow;
+import com.yhao.floatwindow.MoveType;
+import com.yhao.floatwindow.Screen;
 
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
@@ -25,6 +31,7 @@ import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
 import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
+import static android.Manifest.permission.SYSTEM_ALERT_WINDOW;
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 
 public class MainActivity extends AppCompatActivity {
@@ -37,38 +44,62 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        findViewById(R.id.btn_search_wechat)
-                .setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        // 微信搜索
-                        new Thread(new Runnable() {
-                            @Override
-                            public void run() {
-                                Log.i(TAG, "run: start");
-                                File f = new File(Environment.getExternalStorageDirectory() + sourceFileName);
-                                ArrayList<Person> people = (ArrayList<Person>) ExcelUtils.readExcel(f);
-                                for (int i = 31; i < 38; i++) {
-                                    seacrchOnWechat(people.get(i));
-                                    try {
-                                        long sleepTime = 1000 +(long) (Math.random()*1000*60);
-                                        Thread.sleep(sleepTime);
-                                    } catch (InterruptedException e) {
-                                        e.printStackTrace();
-                                    }
-                                }
-                                ExcelUtils.initExcel(Environment.getExternalStorageDirectory() +outFileName, "search_result", new String[]{"name", "phoneNumber", "mac", "nickName", "sex", "area", "sign"});
-                                ExcelUtils.writeObjListToExcel(people, Environment.getExternalStorageDirectory() +outFileName, MainActivity.this);
-                                Log.i(TAG, "run: finished");
-                            }
-                        }).start();
 
-                    }
-                });
-        String[] reqs = new String[]{READ_EXTERNAL_STORAGE, WRITE_EXTERNAL_STORAGE};
+        String[] reqs = new String[]{READ_EXTERNAL_STORAGE, WRITE_EXTERNAL_STORAGE, SYSTEM_ALERT_WINDOW};
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             requestPermissions(reqs, 0);
         }
+        View view = LayoutInflater.from(this).inflate(R.layout.float_utils, null);
+        //美团脚本
+        view.findViewById(R.id.meituan).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FloatWindow.get().hide();
+                new MeituanScript().loadMeituanAddrs(new Callback<List<MeituanAddress>>() {
+                    @Override
+                    public void onFinished(List<MeituanAddress> meituanAddresses) {
+                        FloatWindow.get().show();
+                        Log.i(TAG, "onFinished: " + meituanAddresses.size());
+                    }
+                });
+            }
+        });
+        //weicaht script
+        view.findViewById(R.id.wechat).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Log.i(TAG, "run: start");
+                        File f = new File(Environment.getExternalStorageDirectory() + sourceFileName);
+                        ArrayList<Person> people = (ArrayList<Person>) ExcelUtils.readExcel(f);
+                        for (int i = 31; i < 38; i++) {
+                            seacrchOnWechat(people.get(i));
+                            try {
+                                long sleepTime = 1000 + (long) (Math.random() * 1000 * 60);
+                                Thread.sleep(sleepTime);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                        ExcelUtils.initExcel(Environment.getExternalStorageDirectory() + outFileName, "search_result", new String[]{"name", "phoneNumber", "mac", "nickName", "sex", "area", "sign"});
+                        ExcelUtils.writeObjListToExcel(people, Environment.getExternalStorageDirectory() + outFileName, MainActivity.this);
+                        Log.i(TAG, "run: finished");
+                    }
+                }).start();
+            }
+        });
+        FloatWindow.with(getApplicationContext())
+                .setView(view)
+                .setWidth(500)                               //设置控件宽高
+                .setHeight(Screen.width, 0.2f)
+                .setX(500)                                   //设置控件初始位置
+                .setY(Screen.height, 0.3f)
+                .setDesktopShow(true)//桌面显示
+                .setMoveType(MoveType.slide)
+                .build();
+
     }
 
     private Person seacrchOnWechat(Person p) {

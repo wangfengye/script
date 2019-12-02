@@ -20,4 +20,16 @@
 	* 个性签名 android:id/summary
 6. `input tap 500 400`
 	* 昵称 com.tencent.mm:id/b8p
+
 ```
+
+# 美团收货地址脚本
+1.收货地址
+| resource-id | text |
+| :--: | :--: | :--: |
+| com.sankuai.meituan.takeoutnew:id/waimai_addrsdk_address_name| 地址名称|
+| com.sankuai.meituan.takeoutnew:id/waimai_addrsdk_address_detail | 详细地址 |
+| com.sankuai.meituan.takeoutnew:id/waimai_addrsdk_address_house_number | 门牌号 |
+| com.sankuai.meituan.takeoutnew:id/waimai_addrsdk_uname | 姓名 |
+| com.sankuai.meituan.takeoutnew:id/waimai_addrsdk_phonenumber | 手机号 |
+2. TODO: 无法判断滚动到底,只能实现半自动.
