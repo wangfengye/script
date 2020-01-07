@@ -56,8 +56,6 @@ public class MeituanScript {
                 });
             }
         }).start();
-
-
     }
 
     private List<int[]> getPoints() {

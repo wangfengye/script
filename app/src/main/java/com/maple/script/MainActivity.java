@@ -11,6 +11,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ListView;
 
+import com.maple.script.dingding.DingInfo;
+import com.maple.script.dingding.DingScript;
 import com.yhao.floatwindow.FloatWindow;
 import com.yhao.floatwindow.MoveType;
 import com.yhao.floatwindow.Screen;
@@ -64,6 +66,18 @@ public class MainActivity extends AppCompatActivity {
                 });
             }
         });
+        view.findViewById(R.id.dingding).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FloatWindow.get().hide();
+                new DingScript().load(new Callback<List<DingInfo>>() {
+                    @Override
+                    public void onFinished(List<DingInfo> dingInfos) {
+                        FloatWindow.get().show();
+                    }
+                });
+            }
+        });
         //weicaht script
         view.findViewById(R.id.wechat).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -93,7 +107,7 @@ public class MainActivity extends AppCompatActivity {
         FloatWindow.with(getApplicationContext())
                 .setView(view)
                 .setWidth(500)                               //设置控件宽高
-                .setHeight(Screen.width, 0.2f)
+                .setHeight(Screen.width, 0.5f)
                 .setX(500)                                   //设置控件初始位置
                 .setY(Screen.height, 0.3f)
                 .setDesktopShow(true)//桌面显示
