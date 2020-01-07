@@ -25,8 +25,9 @@
 
 # 美团收货地址脚本
 1.收货地址
+
 | resource-id | text |
-| :--: | :--: | :--: |
+| :--: | :--: |
 | com.sankuai.meituan.takeoutnew:id/waimai_addrsdk_address_name| 地址名称|
 | com.sankuai.meituan.takeoutnew:id/waimai_addrsdk_address_detail | 详细地址 |
 | com.sankuai.meituan.takeoutnew:id/waimai_addrsdk_address_house_number | 门牌号 |
@@ -36,8 +37,9 @@
 
 # 钉钉
 1. 通信录(常用联系人)
+
 | resource-id | text |
-| :--: | :--: | :--: |
+| :--: | :--: | 
 | com.alibaba.android.rimet:id/profile_tv_org | 企业|
 | com.alibaba.android.rimet:id/user_header_full_name | 姓名|
 |com.alibaba.android.rimet:id/user_mobile_info_content_tv|手机号|
